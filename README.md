@@ -1,57 +1,99 @@
-# Yellow Pages Business Details Scraper
+# Yellow Pages Company Scraper
 
-Yellowpages.com Web Scraper written in Python and LXML to extract business details available based on a particular category and location.
+This script is a web scraper designed to collect detailed information about companies listed on Yellow Pages Australia. The script searches for companies based on specified keywords and locations, extracts relevant details, and saves the information into a CSV file.
 
-If you would like to know more about this scraper you can check it out at the blog post 'How to Scrape Business Details from Yellow Pages using Python and LXML' - https://www.scrapehero.com/how-to-scrape-business-details-from-yellowpages-com-using-python-and-lxml/
+## Features
 
-## Getting Started
+1. **Search Functionality**: The scraper generates a search URL based on the specified keyword and location.
+2. **Pagination Handling**: Automatically navigates through multiple pages of search results.
+3. **Data Extraction**: Extracts company name, phone number, address, and website from each company's detail page.
+4. **CSV Export**: Saves the scraped data into a CSV file for further use.
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+---
 
-### Fields to Extract
+## Requirements
 
-This yellow pages scraper can extract the fields below:
-
-1. Rank
-2. Business Name
-3. Phone Number
-4. Business Page
-5. Category
-6. Website
-7. Rating
-8. Street name
-9. Locality
-10. Region
-11. Zipcode
-12. URL
-
-### Prerequisites
-
-For this web scraping tutorial using Python 3, we will need some packages for downloading and parsing the HTML. 
-Below are the package requirements:
-
- - lxml
- - requests
+### Python Packages
+The script requires the following Python packages:
+- `requests`: For fetching web pages.
+- `beautifulsoup4`: For parsing and extracting data from HTML.
+- `csv`: For saving the scraped data into a file.
 
 ### Installation
-
-PIP to install the following packages in Python (https://pip.pypa.io/en/stable/installing/) 
-
-Python Requests, to make requests and download the HTML content of the pages (http://docs.python-requests.org/en/master/user/install/)
-
-Python LXML, for parsing the HTML Tree Structure using Xpaths (Learn how to install that here – http://lxml.de/installation.html)
-
-## Running the scraper
-We would execute the code with the script name followed by the positional arguments **keyword** and **place**. Here is an example
-to find the business details for restaurants in Boston. MA.
-
+To install the required Python packages, run:
+```bash
+pip install requests beautifulsoup4
 ```
-python3 yellow_pages.py restaurants Boston,MA
+
+---
+
+## How to Use
+
+### Step 1: Configure Search Parameters
+Edit the following variables in the script to specify the search criteria:
+- `keyword`: The keyword for the search (e.g., `"Earthmoving Repair"`).
+- `location`: The location to search in (e.g., `"Sydney"`).
+- `filename`: The name of the output CSV file (e.g., `"company_details.csv"`).
+
+### Step 2: Run the Script
+Run the script using Python:
+```bash
+python script_name.py
 ```
-## Sample Output
+Replace `script_name.py` with the filename of the script.
 
-This will create a csv file:
+### Step 3: View the Output
+After the script completes execution, the results will be saved in the specified CSV file. The CSV will contain the following columns:
+- `name`: Company name
+- `phone`: Phone number
+- `address`: Company address
+- `website`: Company website
 
-[Sample Output](https://raw.githubusercontent.com/scrapehero/yellow_pages/master/restaurants-boston-yellowpages-scraped-data.csv)
- 
- 
+---
+
+## Code Overview
+
+### Key Functions
+1. **fetch_page(url, headers)**
+   - Fetches the HTML content of a web page.
+   - Handles HTTP errors and exceptions.
+
+2. **extract_links(html)**
+   - Extracts links to company detail pages from the search results.
+
+3. **extract_company_details(html)**
+   - Extracts detailed information about a company (name, phone, address, website) from its detail page.
+
+4. **construct_url(keyword, location)**
+   - Constructs a search URL based on the specified keyword and location.
+
+5. **get_all_company_details(base_url)**
+   - Handles pagination, extracts links from all result pages, and collects company details.
+
+6. **save_to_csv(data, filename)**
+   - Saves the collected data into a CSV file.
+
+---
+
+## Example Output
+If you search for `Earthmoving Repair` with no specific location, the output CSV might look like this:
+
+| name                           | phone        | address                          | website                       |
+|--------------------------------|--------------|----------------------------------|-------------------------------|
+| Company A                      | 123-456-7890 | 123 Street, City, State          | http://www.company-a.com      |
+| Company B                      | 098-765-4321 | 456 Avenue, City, State          | http://www.company-b.com      |
+
+---
+
+## Notes
+
+1. **Pagination**: The script automatically handles multiple pages of search results, as long as the "Next" button is available.
+2. **Rate Limiting**: To avoid being blocked, consider adding a delay (e.g., `time.sleep(2)`) between requests.
+3. **Incomplete Data**: If some fields (e.g., phone or address) are missing for a company, the script will save "N/A" in those fields.
+4. **Website Changes**: The script relies on the current structure of Yellow Pages Australia. If the website structure changes, updates to the script may be required.
+
+---
+
+## License
+This script is for personal and educational use only. Scraping websites without permission may violate their terms of service. Use this script responsibly.
+
